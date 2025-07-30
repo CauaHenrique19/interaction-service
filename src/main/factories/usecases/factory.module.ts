@@ -17,12 +17,15 @@ import {
   createCommentFactory,
   deleteCommentFactory,
 } from '@interaction-service/main/factories/usecases';
+import { KafkaMessageBrokerAdapter } from '@interaction-service/infra/kafka/adapter';
 
 @Module({
   providers: [
     ReviewRepository,
     LikeRepository,
     CommentRepository,
+
+    KafkaMessageBrokerAdapter,
 
     reviewProvider,
     likeProvider,
@@ -35,6 +38,8 @@ import {
     deleteCommentFactory,
   ],
   exports: [
+    KafkaMessageBrokerAdapter,
+
     createReviewFactory,
     createLikeFactory,
     deleteLikeFactory,

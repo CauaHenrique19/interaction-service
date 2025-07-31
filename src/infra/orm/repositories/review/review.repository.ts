@@ -1,12 +1,22 @@
 import { EntityTarget, Repository } from 'typeorm';
 import { Inject } from '@nestjs/common';
 
-import { CreateReviewRepository } from '@interaction-service/data/protocols/db';
+import {
+  CreateReviewRepository,
+  DeleteReviewRepository,
+  findReviewByIdRepository,
+} from '@interaction-service/data/protocols/db';
 import { Review } from '@interaction-service/infra/orm/entities';
 import { REVIEW_REPOSITORY } from '@interaction-service/infra/orm/typeorm/typeorm.repositories';
 import { AppDataSource } from '@interaction-service/infra/orm/typeorm/data-source';
+import { StatusEnum } from '@interaction-service/domain/enums';
 
-export class ReviewRepository implements CreateReviewRepository {
+export class ReviewRepository
+  implements
+    CreateReviewRepository,
+    DeleteReviewRepository,
+    findReviewByIdRepository
+{
   private readonly reviewRepository: Repository<Review>;
 
   constructor(
@@ -14,6 +24,16 @@ export class ReviewRepository implements CreateReviewRepository {
     private readonly Review: EntityTarget<Review>,
   ) {
     this.reviewRepository = AppDataSource.getRepository(this.Review);
+  }
+
+  async findById(
+    parameters: findReviewByIdRepository.Parameters,
+  ): Promise<findReviewByIdRepository.Result> {
+    return this.reviewRepository.findOne({
+      where: {
+        id: parameters.id,
+      },
+    });
   }
 
   async create(
@@ -24,5 +44,14 @@ export class ReviewRepository implements CreateReviewRepository {
 
     await this.reviewRepository.save(review);
     return review;
+  }
+
+  async delete(
+    parameters: DeleteReviewRepository.Parameters,
+  ): Promise<DeleteReviewRepository.Result> {
+    await this.reviewRepository.update(
+      { id: parameters.id },
+      { status: StatusEnum.INACTIVE },
+    );
   }
 }

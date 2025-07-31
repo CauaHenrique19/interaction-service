@@ -16,6 +16,7 @@ import {
   deleteLikeFactory,
   createCommentFactory,
   deleteCommentFactory,
+  deleteReviewFactory,
 } from '@interaction-service/main/factories/usecases';
 import { KafkaMessageBrokerAdapter } from '@interaction-service/infra/kafka/adapter';
 
@@ -32,6 +33,7 @@ import { KafkaMessageBrokerAdapter } from '@interaction-service/infra/kafka/adap
     commentProvider,
 
     createReviewFactory,
+    deleteReviewFactory,
     createLikeFactory,
     deleteLikeFactory,
     createCommentFactory,
@@ -41,6 +43,7 @@ import { KafkaMessageBrokerAdapter } from '@interaction-service/infra/kafka/adap
     KafkaMessageBrokerAdapter,
 
     createReviewFactory,
+    deleteReviewFactory,
     createLikeFactory,
     deleteLikeFactory,
     createCommentFactory,

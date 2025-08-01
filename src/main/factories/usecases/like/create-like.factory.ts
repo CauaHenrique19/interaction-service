@@ -4,11 +4,15 @@ import { CREATE_LIKE_FACTORY } from '@interaction-service/main/factories/provide
 import { CreateLikeUseCase } from '@interaction-service/domain/usecases';
 import { CreateLike } from '@interaction-service/data/usecases';
 import { LikeRepository } from '@interaction-service/infra/orm/repositories';
+import { KafkaMessageBrokerAdapter } from '@interaction-service/infra/kafka/adapter';
 
 export const createLikeFactory: Provider = {
   provide: CREATE_LIKE_FACTORY,
-  useFactory: (likeRepository: LikeRepository): CreateLikeUseCase => {
-    return new CreateLike(likeRepository);
+  useFactory: (
+    likeRepository: LikeRepository,
+    kafkaMessageBrokerAdapter: KafkaMessageBrokerAdapter,
+  ): CreateLikeUseCase => {
+    return new CreateLike(likeRepository, kafkaMessageBrokerAdapter);
   },
-  inject: [LikeRepository],
+  inject: [LikeRepository, KafkaMessageBrokerAdapter],
 };

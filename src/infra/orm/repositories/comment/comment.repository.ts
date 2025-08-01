@@ -4,13 +4,17 @@ import { Inject } from '@nestjs/common';
 import {
   CreateCommentRepository,
   DeleteCommentRepository,
+  FindCommentByIdRepository,
 } from '@interaction-service/data/protocols/db';
 import { Comment } from '@interaction-service/infra/orm/entities';
 import { COMMENT_REPOSITORY } from '@interaction-service/infra/orm/typeorm/typeorm.repositories';
 import { AppDataSource } from '@interaction-service/infra/orm/typeorm/data-source';
 
 export class CommentRepository
-  implements CreateCommentRepository, DeleteCommentRepository
+  implements
+    CreateCommentRepository,
+    DeleteCommentRepository,
+    FindCommentByIdRepository
 {
   private readonly commentRepository: Repository<Comment>;
 
@@ -19,6 +23,14 @@ export class CommentRepository
     private readonly Comment: EntityTarget<Comment>,
   ) {
     this.commentRepository = AppDataSource.getRepository(this.Comment);
+  }
+
+  async findById(
+    parameters: FindCommentByIdRepository.Parameters,
+  ): Promise<FindCommentByIdRepository.Result> {
+    return await this.commentRepository.findOne({
+      where: { id: parameters.id },
+    });
   }
 
   async create(

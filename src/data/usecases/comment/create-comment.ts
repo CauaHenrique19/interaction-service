@@ -1,9 +1,11 @@
 import { CreateCommentRepository } from '@interaction-service/data/protocols/db';
+import { MessageBroker } from '@interaction-service/data/protocols/message-broker/message-broker';
 import { CreateCommentUseCase } from '@interaction-service/domain/usecases';
 
 export class CreateComment implements CreateCommentUseCase {
   constructor(
     private readonly createCommentRepository: CreateCommentRepository,
+    private readonly messageBroker: MessageBroker,
   ) {}
 
   async create(
@@ -17,6 +19,11 @@ export class CreateComment implements CreateCommentUseCase {
     };
 
     const createdComment = await this.createCommentRepository.create(comment);
+    await this.messageBroker.sendMessage({
+      topicName: 'created_comment',
+      message: createdComment,
+    });
+
     return createdComment;
   }
 }

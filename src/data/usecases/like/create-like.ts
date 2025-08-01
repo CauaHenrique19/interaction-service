@@ -1,8 +1,12 @@
 import { CreateLikeRepository } from '@interaction-service/data/protocols/db';
+import { MessageBroker } from '@interaction-service/data/protocols/message-broker/message-broker';
 import { CreateLikeUseCase } from '@interaction-service/domain/usecases';
 
 export class CreateLike implements CreateLikeUseCase {
-  constructor(private readonly createLikeRepository: CreateLikeRepository) {}
+  constructor(
+    private readonly createLikeRepository: CreateLikeRepository,
+    private readonly messageBroker: MessageBroker,
+  ) {}
 
   async create(
     parameters: CreateLikeUseCase.Parameters,
@@ -14,6 +18,11 @@ export class CreateLike implements CreateLikeUseCase {
     };
 
     const createdLike = await this.createLikeRepository.create(like);
+    await this.messageBroker.sendMessage({
+      topicName: 'created_like',
+      message: createdLike,
+    });
+
     return createdLike;
   }
 }

@@ -16,7 +16,10 @@ export class DeleteLike implements DeleteLikeUseCase {
   async delete(
     parameters: DeleteLikeUseCase.Parameters,
   ): Promise<DeleteLikeUseCase.Result> {
-    const like = await this.findLikeByIdRepository.findById(parameters);
+    const like = await this.findLikeByIdRepository.findById({
+      ...parameters,
+      includeReview: true,
+    });
 
     if (!like) {
       throw new LikeNotFoundError();

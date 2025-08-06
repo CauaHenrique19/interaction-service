@@ -1,6 +1,7 @@
 import {
   DeleteCommentRepository,
   FindCommentByIdRepository,
+  findReviewByIdRepository,
 } from '@interaction-service/data/protocols/db';
 import { MessageBroker } from '@interaction-service/data/protocols/message-broker/message-broker';
 import { CommentNotFoundError } from '@interaction-service/domain/errors';
@@ -16,7 +17,10 @@ export class DeleteComment implements DeleteCommentUseCase {
   async delete(
     parameters: DeleteCommentUseCase.Parameters,
   ): Promise<DeleteCommentUseCase.Result> {
-    const comment = await this.findCommentByIdRepository.findById(parameters);
+    const comment = await this.findCommentByIdRepository.findById({
+      ...parameters,
+      includeReview: true,
+    });
 
     if (!comment) {
       throw new CommentNotFoundError();

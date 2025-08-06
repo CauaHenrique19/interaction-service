@@ -7,6 +7,9 @@ export interface FindLikeByIdRepository {
 }
 
 export namespace FindLikeByIdRepository {
-  export type Parameters = Pick<LikeModel, 'id'>;
+  export type Parameters = Pick<LikeModel, 'id'> &
+    Partial<{
+      includeReview: boolean;
+    }>;
   export type Result = LikeModel | null;
 }

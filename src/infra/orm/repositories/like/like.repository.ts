@@ -29,6 +29,9 @@ export class LikeRepository
       where: {
         id: parameters.id,
       },
+      relations: {
+        review: parameters.includeReview,
+      },
     });
   }
 

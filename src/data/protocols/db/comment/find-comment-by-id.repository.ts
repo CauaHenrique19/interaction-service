@@ -7,6 +7,9 @@ export interface FindCommentByIdRepository {
 }
 
 export namespace FindCommentByIdRepository {
-  export type Parameters = Pick<CommentModel, 'id'>;
+  export type Parameters = Pick<CommentModel, 'id'> &
+    Partial<{
+      includeReview: boolean;
+    }>;
   export type Result = CommentModel | null;
 }

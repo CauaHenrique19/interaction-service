@@ -30,6 +30,9 @@ export class CommentRepository
   ): Promise<FindCommentByIdRepository.Result> {
     return await this.commentRepository.findOne({
       where: { id: parameters.id },
+      relations: {
+        review: parameters.includeReview,
+      },
     });
   }
 

@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
         - name: interaction-service
-          image: cauahrq/interaction-service:v3
+          image: cauahrq/interaction-service:v7
           ports:
-            - containerPort: 3001
+            - containerPort: 3002
           resources:
             requests:
               memory: '64Mi'
@@ -30,7 +30,7 @@ spec:
             - name: PORT
               value: '3002'
             - name: DATABASE_HOST
-              value: 'localhost'
+              value: 'host.docker.internal'
             - name: DATABASE_PORT
               value: '5432'
             - name: DATABASE_USERNAME
@@ -42,7 +42,7 @@ spec:
             - name: SERVICE_NAME
               value: 'interaction-service'
             - name: KAFKA_BROKER_HOST
-              value: 'localhost:9094'
+              value: 'host.docker.internal:9094'
             - name: NODE_ENV
               value: 'development'
       restartPolicy: Always
